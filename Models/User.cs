@@ -1,7 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using summerSemesterProj.Models;
-using System.Collections.Generic;
 
 
 namespace summerSemesterProj.Models {

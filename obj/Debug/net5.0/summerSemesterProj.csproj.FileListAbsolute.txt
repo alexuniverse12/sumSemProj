@@ -1,4 +1,3 @@
-C:\ProgrammingLearning\cuProgramming\summerSemesterProj\obj\Debug\net5.0\summerSemesterProj.csproj.AssemblyReference.cache
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\obj\Debug\net5.0\summerSemesterProj.GeneratedMSBuildEditorConfig.editorconfig
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\obj\Debug\net5.0\summerSemesterProj.AssemblyInfoInputs.cache
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\obj\Debug\net5.0\summerSemesterProj.AssemblyInfo.cs
@@ -61,3 +60,4 @@ C:\ProgrammingLearning\cuProgramming\summerSemesterProj\bin\Debug\net5.0\AutoMap
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\ProgrammingLearning\cuProgramming\summerSemesterProj\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+C:\ProgrammingLearning\cuProgramming\summerSemesterProj\obj\Debug\net5.0\summerSemesterProj.csprojAssemblyReference.cache

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using summerSemesterProj.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+
 
 namespace summerSemesterProj.Data {
 

@@ -1,17 +1,16 @@
-using System.Collections.Generic;
-using summerSemesterProj.Models;
-using Microsoft.AspNetCore.Mvc;
-using summerSemesterProj.Data;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using static System.Console;
+using summerSemesterProj.Data;
 using summerSemesterProj.Dtos;
 using summerSemesterProj.Helpers;
-using Microsoft.AspNetCore.Http;
-using static System.Console;
-using System;
+using summerSemesterProj.Models;
 
 namespace summerSemesterProj.Controllers {
     //  (/home)
-    [Route("home")]
+    // [Route("home")]
     [ApiController]
     public class MainController : ControllerBase {
         private readonly IUsersRepo _repository;
@@ -36,7 +35,7 @@ namespace summerSemesterProj.Controllers {
         }
 
         // home/login 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public IActionResult Login(RegDto user){
             var currUser = _repository.GetUserByEmail(user.Email);
             // var mappedUser = _mapper.Map<User>(currUser);
@@ -53,7 +52,7 @@ namespace summerSemesterProj.Controllers {
 
             var jwtToken = _jwtService.generate(currUser.Id);
 
-            Response.Cookies.Append("jwtToken", jwtToken, new CookieOptions{HttpOnly = true});
+            Response.Cookies.Append("jwtToken", jwtToken, new CookieOptions{HttpOnly = true, SameSite = SameSiteMode.None, Secure = true});
 
             return Ok(new {message = "logged in successfully"});
         }
@@ -130,7 +129,8 @@ namespace summerSemesterProj.Controllers {
                 _repository.DeleteNote(userWithNotes, note.noteId);     
                 
                 return NoContent();     
-            } catch {
+            } catch (Exception e){
+                WriteLine(e);
                 return Unauthorized();
             }
         }
