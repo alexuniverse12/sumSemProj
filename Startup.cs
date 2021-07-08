@@ -49,7 +49,7 @@ namespace summerSemesterProj
             }
 
                         // allowed ports for front-end
-            app.UseCors(options => options.WithOrigins("https://localhost:3000")
+            app.UseCors(options => options.WithOrigins("http://localhost:3000")
                                           .AllowAnyHeader()
                                           .AllowAnyMethod()
                                           .AllowCredentials()
