@@ -2,6 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace summerSemesterProj.Helpers {
     public class JWTService {
@@ -32,6 +33,18 @@ namespace summerSemesterProj.Helpers {
             , out SecurityToken validatedToken);
 
             return (JwtSecurityToken) validatedToken;
+        }
+
+        public string validateToken(HttpRequest Request){
+            var jwtToken = Request.Cookies["jwtToken"];
+            if(jwtToken == null){
+                return null;
+            };
+            
+            var token = verifyToken(jwtToken);
+            string userId = token.Issuer;
+
+            return userId;
         }
     }
 }

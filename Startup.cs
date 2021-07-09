@@ -30,7 +30,7 @@ namespace summerSemesterProj
             }); 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IUsersRepo, UsersSqlRepo>();  
-            services.AddScoped<JWTService>();  
+            services.AddScoped<JWTService>();    
             services.AddCors();
         }
 

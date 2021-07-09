@@ -2,15 +2,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using static System.Console;
 using summerSemesterProj.Data;
 using summerSemesterProj.Dtos;
 using summerSemesterProj.Helpers;
 using summerSemesterProj.Models;
 
 namespace summerSemesterProj.Controllers {
-    //  (/home)
-    // [Route("home")]
+
     [ApiController]
     public class MainController : ControllerBase {
         private readonly IUsersRepo _repository;
@@ -21,17 +19,20 @@ namespace summerSemesterProj.Controllers {
             _repository = repository; 
             _mapper = mapper; 
             _jwtService = jwtService;
-            
         }
         
-        // home/createUser
+        // /createUser
         [HttpPost("createUser")]
         public IActionResult Register(RegDto user){
             var ourUser = _mapper.Map<User>(user);
+            var  checkUser = _repository.GetUserByEmail(ourUser.Email);
+            if(checkUser != null){
+                // return BadRequest(new {message = "Already Exists"});
+                throw new Exception();
+            }
             _repository.CreateUser(ourUser);
 
             return Created("success", ourUser.Email);
-
         }
 
         // home/login 
@@ -46,7 +47,7 @@ namespace summerSemesterProj.Controllers {
             }
 
             // not correct password
-            if(user.Email != currUser.Email){
+            if(user.Password != currUser.Password){
                 return BadRequest(new {message = "Invalid Credentials"});
             }
 
@@ -58,80 +59,68 @@ namespace summerSemesterProj.Controllers {
         }
 
 
-        // home/user
+        // /user
         [HttpGet("user")]
         public IActionResult GetUserById(int id){
-            // authorization by verifying token of the user
-            try {
-                var jwtToken = Request.Cookies["jwtToken"];
-                var token = _jwtService.verifyToken(jwtToken);
-                string userId = token.Issuer;
-                var user = _repository.GetUserById(userId);
+            string userId = _jwtService.validateToken(Request);
+            var user = _repository.GetUserById(userId);
 
-                return Ok(user);     
-            } catch {
-                return Unauthorized();
+            if(user == null){
+                return BadRequest(new {message = "Not Authorized"});
             }
-        
+
+            return Ok(user); 
         }
 
-        // home/logout
+        // /logout
         [HttpPost("logout")]
         public IActionResult Logout(int id){
             // deleting the cookie
-            Response.Cookies.Delete("jwtToken");
+            Response.Cookies.Delete("jwtToken", new CookieOptions{HttpOnly = true, SameSite = SameSiteMode.None, Secure = true});
             
             return Ok(new {message = "logged out successfully"});
         }
         
         
 
-        // home/addNote
+        // /addNote
         [HttpPost("user/addNote")]
         public IActionResult AddNote(Note note){
             try {
-                var jwtToken = Request.Cookies["jwtToken"];
-                var token = _jwtService.verifyToken(jwtToken);
-                string userId = token.Issuer;
+                string userId = _jwtService.validateToken(Request);
                 _repository.CreateNote(note, userId);     
                 
                 return Created("Note created", note);     
-            } catch {
-                return Unauthorized();
+            } catch (Exception error) {
+                return BadRequest(new {error});
             }
         }
 
-        // home/getAllNotes 
+        // /getAllNotes 
         [HttpGet("user/getAllNotes")]
         public IActionResult GetAllNotes(){
-            try {
-                var jwtToken = Request.Cookies["jwtToken"];
-                var token = _jwtService.verifyToken(jwtToken);
-                string userId = token.Issuer;
-                var userNotes = _repository.GetNotes(userId);     
-                
-                return Ok(userNotes);     
-            } catch (Exception e){
-                WriteLine(e);
-                return Unauthorized();
+            string userId = _jwtService.validateToken(Request);
+            var userNotes = _repository.GetNotes(userId);     
+
+            if(userNotes == null){
+                return BadRequest(new {message = "Not Authorized"});
             }
+
+            return Ok(userNotes); 
         }
 
 
-        // home/deleteNote
+        // /deleteNote
         [HttpDelete("user/deleteNote")]
         public IActionResult DeleteNote(Note note){
             try {
-                var jwtToken = Request.Cookies["jwtToken"];
-                var token = _jwtService.verifyToken(jwtToken);
-                string userId = token.Issuer;
+                string userId = _jwtService.validateToken(Request);
                 var userWithNotes = _repository.GetNotes(userId); 
                 _repository.DeleteNote(userWithNotes, note.noteId);     
                 
                 return NoContent();     
-            } catch (Exception e){
-                WriteLine(e);
-                return Unauthorized();
+            } catch (Exception error){
+                return BadRequest(new {error});;
             }
         }
     }

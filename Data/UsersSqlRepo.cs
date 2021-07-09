@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
-using static System.Console;
 using summerSemesterProj.Models;
 
 namespace summerSemesterProj.Data {
@@ -34,7 +33,6 @@ namespace summerSemesterProj.Data {
                        .Where(us => us.Id == id)
                        .Include(us => us.Notes)
                        .FirstOrDefault();
-            WriteLine(currUser);
             return currUser;
         }
 
